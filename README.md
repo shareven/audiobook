@@ -28,3 +28,14 @@ A Flutter project.
 
 
 > 如果自己有不同的想法，请fork，自行修改 | If you have different ideas, please fork and modify it yourself
+
+
+## APP Show
+
+<img src="https://github.com/shareven/audiobook/blob/main/images/audiobook1.jpg?raw=true" width="200">
+
+<img src="https://github.com/shareven/audiobook/blob/main/images/audiobook2.jpg?raw=true" width="200">
+
+<img src="https://github.com/shareven/audiobook/blob/main/images/audiobook3.jpg?raw=true" width="200">
+
+<img src="https://github.com/shareven/audiobook/blob/main/images/audiobook4.jpg?raw=true" width="200">

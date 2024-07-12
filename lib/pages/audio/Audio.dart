@@ -106,7 +106,8 @@ class _AudioState extends State<Audio> {
                               width: 400,
                               height: 400,
                               imageUrl: '${metadata.artUri!}',
-                              errorWidget: (context, url, error) => EmptyImage(
+                              errorWidget: (context, url, error) =>
+                                  EmptyImage(
                                 size: 250,
                               ),
                             ),

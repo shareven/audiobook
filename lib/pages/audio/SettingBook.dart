@@ -12,18 +12,20 @@ class SettingBook extends StatefulWidget {
 }
 
 class _SettingBookState extends State<SettingBook> {
-  String _skipSecondsStart = "0";
+  final _formKey = GlobalKey<FormState>();
   String _selectedDirectory = "";
   bool _isLocalBook = false;
-  TextEditingController _skipSecondsStartController =
+  TextEditingController _networkUrlController =
       new TextEditingController(text: "");
+  TextEditingController _skipSecondsStartController =
+      new TextEditingController(text: "0");
 
   FocusNode _focusNodeSkipSecondsStart = FocusNode();
-  String _skipSecondsEnd = "0";
   TextEditingController _skipSecondsEndController =
-      new TextEditingController(text: "");
+      new TextEditingController(text: "0");
 
   FocusNode _focusNodeSkipSecondsEnd = FocusNode();
+  bool _enableBtn = true;
 
   @override
   void initState() {
@@ -34,6 +36,7 @@ class _SettingBookState extends State<SettingBook> {
   @override
   void dispose() {
     super.dispose();
+    _networkUrlController.dispose();
     _skipSecondsStartController.dispose();
     _focusNodeSkipSecondsStart.dispose();
     _skipSecondsEndController.dispose();
@@ -44,10 +47,10 @@ class _SettingBookState extends State<SettingBook> {
     List<Duration> list = await LocalStorage.getPlaySkipSeconds();
     bool isLocalBook = await LocalStorage.getIsLocalBook();
     String localBookDirectory = await LocalStorage.getLocalBookDirectory();
+    String networkBookUrl = await LocalStorage.getNetworkBookUrl();
     _skipSecondsStartController.text = list[0].inSeconds.toString();
-    _skipSecondsStart = list[0].inSeconds.toString();
     _skipSecondsEndController.text = list[1].inSeconds.toString();
-    _skipSecondsEnd = list[1].inSeconds.toString();
+    _networkUrlController.text = networkBookUrl;
     setState(() {
       _isLocalBook = isLocalBook;
       _selectedDirectory = localBookDirectory;
@@ -55,10 +58,16 @@ class _SettingBookState extends State<SettingBook> {
   }
 
   void _post() async {
-    var isSuccess = await LocalStorage.setPlaySkipSeconds(
-        [_skipSecondsStart, _skipSecondsEnd]);
+    var isSuccess = await LocalStorage.setPlaySkipSeconds([
+      _skipSecondsStartController.text.trim(),
+      _skipSecondsEndController.text.trim()
+    ]);
     await LocalStorage.setIsLocalBook(_isLocalBook);
-    await LocalStorage.setLocalBookDirectory(_selectedDirectory);
+    if (_isLocalBook) {
+      await LocalStorage.setLocalBookDirectory(_selectedDirectory);
+    } else {
+      await LocalStorage.setNetworkBookUrl(_networkUrlController.text.trim());
+    }
     if (isSuccess) {
       Provider.of<AudioProvide>(context, listen: false).setPlayBookItems();
 
@@ -118,7 +127,34 @@ class _SettingBookState extends State<SettingBook> {
                   ),
                 ],
               )
-            : Container(),
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                    child: Text("网络音频地址 | Network audio url"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: TextFormField(
+                      validator: (v) {
+                        if (v != null && v.trim().isEmpty) {
+                          return null;
+                        }
+                        if (v != null && !v.trim().startsWith("http")) {
+                          return "需http开头 | Must start with http";
+                        }
+                        return null;
+                      },
+                      controller: _networkUrlController,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(1),
+                        hintText: "https://audiobook-resource.vercel.app",
+                      ),
+                    ),
+                  ),
+                ],
+              ),
       ],
     );
   }
@@ -130,63 +166,74 @@ class _SettingBookState extends State<SettingBook> {
           title: Text("设置 | Setting"),
           actions: [
             IconButton(
-                onPressed: _skipSecondsStart.isNotEmpty ? _post : null,
-                icon: Icon(Icons.check))
+                onPressed: _enableBtn ? _post : null, icon: Icon(Icons.check))
           ],
         ),
-        body: ListView(
-          children: [
-            buildIsLocalBook(context),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Text("跳过片头秒数 | Skip opening"),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: TextField(
-                onChanged: (e) {
-                  setState(() {
-                    _skipSecondsStart = e.trim();
-                  });
-                },
-                keyboardType: TextInputType.number,
-                focusNode: _focusNodeSkipSecondsStart,
-                controller: _skipSecondsStartController,
-                onSubmitted: (e) => _focusNodeSkipSecondsEnd.requestFocus(),
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
+        body: Form(
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          onChanged: () =>
+              setState(() => _enableBtn = _formKey.currentState!.validate()),
+          child: ListView(
+            children: [
+              buildIsLocalBook(context),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                child: Text("跳过片头秒数 | Skip opening"),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: TextFormField(
+                  validator: (v) {
+                    String val = v!.trim();
+                    if (val.isEmpty) return "不能为空 | Required";
+                    if (int.tryParse(val) == null || int.parse(val) < 0) {
+                      return "不是数字 | Must number";
+                    }
+                    return null;
+                  },
+                  keyboardType: TextInputType.number,
+                  focusNode: _focusNodeSkipSecondsStart,
+                  controller: _skipSecondsStartController,
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(1),
                     hintText: "跳过片头秒数 | Skip opening",
-                    suffixText: "s"),
+                    suffixText: "s",
+                  ),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Text("跳过片尾秒数 | Skip the end"),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: TextField(
-                onChanged: (e) {
-                  setState(() {
-                    _skipSecondsEnd = e.trim();
-                  });
-                },
-                keyboardType: TextInputType.number,
-                focusNode: _focusNodeSkipSecondsEnd,
-                controller: _skipSecondsEndController,
-                onSubmitted: (e) => _post(),
-                textInputAction: TextInputAction.send,
-                decoration: InputDecoration(
+              SizedBox(
+                height: 15,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                child: Text("跳过片尾秒数 | Skip the end"),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: TextFormField(
+                  validator: (v) {
+                    String val = v!.trim();
+                    if (val.isEmpty) return "不能为空 | Required";
+                    if (int.tryParse(val) == null || int.parse(val) < 0) {
+                      return "不是数字 | Must number";
+                    }
+                    return null;
+                  },
+                  keyboardType: TextInputType.number,
+                  focusNode: _focusNodeSkipSecondsEnd,
+                  controller: _skipSecondsEndController,
+                  textInputAction: TextInputAction.send,
+                  decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(1),
                     hintText: "跳过片尾秒数 | Skip the end",
-                    suffixText: "s"),
+                    suffixText: "s",
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ));
   }
 }

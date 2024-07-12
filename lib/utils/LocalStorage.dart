@@ -11,6 +11,7 @@ class LocalStorage {
   static const String currentBookKey = "currentBookKey";
   static const String isLocalBookKey = "isLocalBookKey";
   static const String localBookDirectoryKey = "localBookDirectoryKey";
+  static const String networkBookUrlKey = "networkBookUrlKey";
 
   static Future<bool?> setBooksVal(List list) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -99,5 +100,15 @@ class LocalStorage {
   static Future<String> getLocalBookDirectory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(localBookDirectoryKey) ?? Global.bookLocalPath;
+  }
+
+  static Future<bool> setNetworkBookUrl(String val) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString(networkBookUrlKey, val);
+  }
+
+  static Future<String> getNetworkBookUrl() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(networkBookUrlKey) ?? Global.bookNetworkUrl;
   }
 }

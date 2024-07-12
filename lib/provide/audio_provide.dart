@@ -17,6 +17,7 @@ class AudioProvide with ChangeNotifier {
     BookModel? res = await LocalStorage.getCurrentBookVal();
     bool isLocalBook = await LocalStorage.getIsLocalBook();
     String bookLocalPath = await LocalStorage.getLocalBookDirectory();
+    String bookNetworkUrl = await LocalStorage.getNetworkBookUrl();
 
     BookModel book = res ?? Global.books[0];
     List<AudioSource> items = List.generate(
@@ -28,7 +29,7 @@ class AudioProvide with ChangeNotifier {
         return AudioSource.uri(
           isLocalBook
               ? Uri.file('${bookLocalPath}/${book.name}/${fileName}')
-              : Uri.parse('${Global.bookBaseUrl}/${book.name}/${fileName}'),
+              : Uri.parse('${bookNetworkUrl}/${book.name}/${fileName}'),
           tag: MediaItem(
             id: '$i',
             album: str,
@@ -81,27 +82,38 @@ class AudioProvide with ChangeNotifier {
   }
 
   setPlayBookItems() async {
-    try {
-      // 请求权限 | Permission request
-      await Permission.audio.request();
+    bool isLocalBook = await LocalStorage.getIsLocalBook();
+    if (isLocalBook) {
+      try {
+        // 请求权限 | Permission request
+        await Permission.audio.request();
 
-      var status = await Permission.audio.status;
-      if (status.isGranted) {
-        List<AudioSource> list = await _getCurrentBookItems();
-        _playlist = ConcatenatingAudioSource(children: list);
-        try {
-          await player.setAudioSource(_playlist);
-        } catch (e) {
-          showErrorMsg(e.toString());
+        var status = await Permission.audio.status;
+
+        if (status.isGranted) {
+          _setSource();
+        } else {
+          showErrorMsg("音频权限获取失败 | Failed to obtain audio permission");
         }
-        _getRecord();
-      } else {
-        showErrorMsg("音频权限获取失败 | Failed to obtain audio permission");
+      } catch (e, stackTrace) {
+        print("Error loading playlist: $e");
+        print(stackTrace);
       }
-    } catch (e, stackTrace) {
-      print("Error loading playlist: $e");
-      print(stackTrace);
+    } else {
+      _setSource();
     }
+    notifyListeners();
+  }
+
+  _setSource() async {
+    List<AudioSource> list = await _getCurrentBookItems();
+    _playlist = ConcatenatingAudioSource(children: list);
+    try {
+      await player.setAudioSource(_playlist);
+    } catch (e) {
+      showErrorMsg(e.toString());
+    }
+    _getRecord();
     notifyListeners();
   }
 

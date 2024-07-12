@@ -4,9 +4,9 @@ A Flutter project.
 
 ## Getting Started
 
-网络资源路径配置 | Network resource path configuration：
+默认网络资源路径配置 | Default network resource path configuration：
 
-[bookBaseUrl](./lib/config/Global.dart)
+[bookNetworkUrl](./lib/config/Global.dart)
 
 默认听书资源配置 | Default audiobook resource configuration:：
 

@@ -2,6 +2,9 @@
 
 A Flutter project.
 
+## 下载 | Download
+[Android app release](https://github.com/shareven/audiobook/releases/)
+
 ## Getting Started
 
 默认网络资源路径配置 | Default network resource path configuration：

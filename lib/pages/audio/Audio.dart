@@ -106,8 +106,7 @@ class _AudioState extends State<Audio> {
                               width: 400,
                               height: 400,
                               imageUrl: '${metadata.artUri!}',
-                              errorWidget: (context, url, error) =>
-                                  EmptyImage(
+                              errorWidget: (context, url, error) => EmptyImage(
                                 size: 250,
                               ),
                             ),
@@ -140,7 +139,7 @@ class _AudioState extends State<Audio> {
             ),
             const SizedBox(height: 8.0),
             SizedBox(
-              height: 240.0,
+              height: 340.0,
               child: StreamBuilder<SequenceState?>(
                 stream: player.sequenceStateStream,
                 builder: (context, snapshot) {

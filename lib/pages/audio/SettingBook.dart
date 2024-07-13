@@ -188,7 +188,7 @@ class _SettingBookState extends State<SettingBook> {
                     String val = v!.trim();
                     if (val.isEmpty) return "不能为空 | Required";
                     if (int.tryParse(val) == null || int.parse(val) < 0) {
-                      return "不是数字 | Must number";
+                      return "不是正整数 | Must positive integer";
                     }
                     return null;
                   },
@@ -217,7 +217,7 @@ class _SettingBookState extends State<SettingBook> {
                     String val = v!.trim();
                     if (val.isEmpty) return "不能为空 | Required";
                     if (int.tryParse(val) == null || int.parse(val) < 0) {
-                      return "不是数字 | Must number";
+                      return "不是正整数 | Must positive integer";
                     }
                     return null;
                   },

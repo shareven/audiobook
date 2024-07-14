@@ -35,10 +35,10 @@ A Flutter project.
 
 ## APP Show
 
-<img src="https://github.com/shareven/audiobook/blob/main/images/audiobook1.jpg?raw=true" width="200">
+<img src="https://cdn.jsdelivr.net/gh/shareven/audiobook/images/audiobook1.jpg" width="200">
 
-<img src="https://github.com/shareven/audiobook/blob/main/images/audiobook2.jpg?raw=true" width="200">
+<img src="https://cdn.jsdelivr.net/gh/shareven/audiobook/images/audiobook2.jpg" width="200">
 
-<img src="https://github.com/shareven/audiobook/blob/main/images/audiobook3.jpg?raw=true" width="200">
+<img src="https://cdn.jsdelivr.net/gh/shareven/audiobook/images/audiobook3.jpg" width="200">
 
-<img src="https://github.com/shareven/audiobook/blob/main/images/audiobook4.jpg?raw=true" width="200">
+<img src="https://cdn.jsdelivr.net/gh/shareven/audiobook/images/audiobook4.jpg" width="200">

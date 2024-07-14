@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class Global {
   static const themeColor = Colors.pink;
-  static const String bookNetworkUrl = "https://audiobook-resource.vercel.app";
+  static const String bookNetworkUrl = "https://cdn.jsdelivr.net/gh/shareven/audiobookResource";
   static const String bookLocalPath = "/storage/emulated/0/Music/book";
 
   // 每3s自动保存播放进度 | Automatically save playback progress every 3 seconds

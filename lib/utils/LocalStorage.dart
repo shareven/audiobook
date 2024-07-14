@@ -109,6 +109,7 @@ class LocalStorage {
 
   static Future<String> getNetworkBookUrl() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(networkBookUrlKey) ?? Global.bookNetworkUrl;
+    String? val = prefs.getString(networkBookUrlKey);
+    return val == null || val.isEmpty ? Global.bookNetworkUrl : val;
   }
 }

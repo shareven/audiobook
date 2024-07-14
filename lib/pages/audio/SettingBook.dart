@@ -147,9 +147,9 @@ class _SettingBookState extends State<SettingBook> {
                         return null;
                       },
                       controller: _networkUrlController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         contentPadding: EdgeInsets.all(1),
-                        hintText: "https://audiobook-resource.vercel.app",
+                        hintText: Global.bookNetworkUrl,
                       ),
                     ),
                   ),

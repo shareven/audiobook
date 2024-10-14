@@ -9,7 +9,7 @@ class EmptyImage extends StatelessWidget {
     return Container(
       width: size ?? 35.0,
       height: size ?? 35.0,
-      color: Colors.grey[200],
+      color: Theme.of(context).highlightColor,
     );
   }
 }

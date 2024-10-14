@@ -19,7 +19,7 @@ Future<void> main() async {
 
   Provider.debugCheckInvalidValueType = null;
   final provides = [
-    Provider<AudioProvide>(create: (_) => AudioProvide()),
+    ChangeNotifierProvider(create: (_) => AudioProvide()),
   ];
 
   runApp(MultiProvider(providers: provides, child: MyApp()));
@@ -36,24 +36,42 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     // 初始化audio | Init audio
-    Provider.of<AudioProvide>(context, listen: false).audioInit();
+    context.read<AudioProvide>().audioInit();
 
     return OverlaySupport.global(
       child: MaterialApp(
+        themeMode: ThemeMode.system,
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          cardTheme: const CardTheme(
+              color: Color.fromARGB(221, 28, 28, 28),
+              elevation: 0,
+              margin: EdgeInsets.zero),
+          colorScheme: const ColorScheme.dark(
+            surface: Color.fromARGB(248, 17, 17, 17),
+            primary: Global.themeColor,
+            onPrimary: Colors.white,
+            secondary: Colors.cyan,
+          ),
+        ),
         theme: ThemeData(
-          cardTheme: CardTheme(
+          cardTheme: const CardTheme(
               color: Colors.white, elevation: 0, margin: EdgeInsets.zero),
-          tabBarTheme: TabBarTheme(
+          tabBarTheme: const TabBarTheme(
             labelColor: Colors.white,
             indicatorColor: Colors.white,
             unselectedLabelColor: Colors.white54,
           ),
-          appBarTheme: AppBarTheme(
+          appBarTheme: const AppBarTheme(
             foregroundColor: Colors.white,
             backgroundColor: Global.themeColor,
           ),
           primarySwatch: Global.themeColor,
-          colorScheme: ColorScheme.fromSeed(seedColor: Global.themeColor),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Global.themeColor,
+            primary: Global.themeColor,
+            secondary: Colors.cyan,
+          ),
           useMaterial3: true,
         ),
         home: Audio(),

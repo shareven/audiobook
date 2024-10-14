@@ -13,6 +13,7 @@ xmlns:tools="http://schemas.android.com/tools">
     <application
         android:label="Audio book"
         android:name="${applicationName}"
+        android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name="com.ryanheise.audioservice.AudioServiceActivity"

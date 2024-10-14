@@ -116,7 +116,7 @@ class _SettingBookState extends State<SettingBook> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: ElevatedButton(
+                    child: FilledButton(
                       child: Text("选择音频目录 | Select audio directory"),
                       onPressed: selectDirectory,
                     ),

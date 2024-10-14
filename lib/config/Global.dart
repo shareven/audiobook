@@ -5,7 +5,7 @@ class Global {
   static const themeColor = Colors.pink;
   static const String bookNetworkUrl = "https://cdn.jsdelivr.net/gh/shareven/audiobookResource";
   static const String bookLocalPath = "/storage/emulated/0/Music/book";
-
+  static const List<int> closeTimeList = [0, 10, 20, 30, 40, 60, 90];
   // 每3s自动保存播放进度 | Automatically save playback progress every 3 seconds
   static const int autoSaveSeconds = 3;
 

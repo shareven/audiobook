@@ -187,7 +187,7 @@ class _LeaveBehindListItem extends StatelessWidget {
               child: const ListTile(
                   trailing: Icon(Icons.add, color: Colors.white, size: 36.0))),
           secondaryBackground: Container(
-              color: theme.primaryColor,
+              color: Colors.pink,
               child: const ListTile(
                   contentPadding: EdgeInsets.all(14.0),
                   trailing:

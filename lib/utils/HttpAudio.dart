@@ -1,4 +1,4 @@
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:audiobook/utils/ResultData.dart';
 import 'package:audiobook/utils/utils.dart';
@@ -7,10 +7,10 @@ class HttpAudio {
   static Future<ResultData> request(String url,
       {params, xShareKey, method}) async {
     
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile) {
+    List connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult.contains(ConnectivityResult.mobile)) {
       // I am connected to a mobile network.
-    } else if (connectivityResult == ConnectivityResult.wifi) {
+    } else if (connectivityResult.contains(ConnectivityResult.wifi) ) {
       // I am connected to a wifi network.
     } else {
       showErrorMsg('网络连接失败|Network connection failed');

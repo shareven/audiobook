@@ -21,7 +21,8 @@ class AudioProvide with ChangeNotifier {
   DateTime? closeDateTime;
   
   Timer? _timer;
-
+  
+  StreamSubscription<Duration>? subscriptionPlayStream;
   
   void cancelTimer() {
     closeDateTime = null;
@@ -85,11 +86,13 @@ class AudioProvide with ChangeNotifier {
     List<Duration> bookSkipSeconds = await LocalStorage.getPlaySkipSeconds();
 
     // Listen to errors during playback.
-    player.playbackEventStream.listen((event) {},
-        onError: (Object e, StackTrace stackTrace) {
-      
-    });
-    player.positionStream.listen((position) {
+    player.playbackEventStream
+        .listen((event) {}, onError: (Object e, StackTrace stackTrace) {});
+
+    if (subscriptionPlayStream != null) {
+      await subscriptionPlayStream!.cancel();
+    }
+    subscriptionPlayStream = player.positionStream.listen((position) {
       //  记录播放位置 3s保存一次 | Record playback position and save once every 3 seconds
       if (player.playing &&
           player.currentIndex != null &&

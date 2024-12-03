@@ -69,7 +69,7 @@ class _SettingBookState extends State<SettingBook> {
       await LocalStorage.setNetworkBookUrl(_networkUrlController.text.trim());
     }
     if (isSuccess) {
-      Provider.of<AudioProvide>(context, listen: false).setPlayBookItems();
+      context.read<AudioProvide>().audioInit();
 
       Navigator.pop(context);
     }

@@ -129,9 +129,8 @@ class AudioProvide with ChangeNotifier {
 
         var status = await Permission.audio.status;
 
-        if (status.isGranted) {
-          _setSource();
-        } else {
+        _setSource();
+        if (!status.isGranted) {
           showErrorMsg("音频权限获取失败 | Failed to obtain audio permission");
         }
       } catch (e, stackTrace) {
